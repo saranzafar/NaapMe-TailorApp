@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "223523548568",
+    "project_id": "naapme",
+    "storage_bucket": "naapme.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223523548568:android:96fa0877378f8218a1cfed",
+        "android_client_info": {
+          "package_name": "com.naapme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "223523548568-1e5q9rf6u792gtqnv9uv0g3ev1evt57f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.naapme",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "223523548568-n4rlmqpe4mo2lp8db98dv97ptsfmtu7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcYBLQO00DPX2okGt62aS4wIzEuky_qUs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "223523548568-n4rlmqpe4mo2lp8db98dv97ptsfmtu7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

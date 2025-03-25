@@ -22,5 +22,15 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
+
+      <!-- Firebase Authentication -->
+      <meta-data
+          android:name="com.google.firebase.auth.api.gms.core.default_web_client_id"
+          android:value="@string/default_web_client_id" />
+
+      <!-- Intent filter for Google Sign-In -->
+      <activity android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+          android:excludeFromRecents="true"
+          android:exported="false"/>
     </application>
 </manifest>
