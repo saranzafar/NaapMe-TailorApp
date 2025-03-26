@@ -1,0 +1,85 @@
+[debug] [2025-03-23T10:18:07.756Z] ----------------------------------------------------------------------
+[debug] [2025-03-23T10:18:07.760Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Saran Zafar\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions
+[debug] [2025-03-23T10:18:07.760Z] CLI Version:   13.35.1
+[debug] [2025-03-23T10:18:07.761Z] Platform:      win32
+[debug] [2025-03-23T10:18:07.761Z] Node Version:  v22.13.1
+[debug] [2025-03-23T10:18:07.761Z] Time:          Sun Mar 23 2025 15:18:07 GMT+0500 (Pakistan Standard Time)
+[debug] [2025-03-23T10:18:07.762Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-03-23T10:18:08.082Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-03-23T10:18:08.083Z] > authorizing via signed-in user (saran.development@gmail.com)
+[debug] [2025-03-23T10:18:08.083Z] [iam] checking project naapme for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2025-03-23T10:18:08.085Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:08.085Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:08.086Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/naapme:testIamPermissions [none]
+[debug] [2025-03-23T10:18:08.086Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/naapme:testIamPermissions x-goog-quota-user=projects/naapme
+[debug] [2025-03-23T10:18:08.087Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/naapme:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2025-03-23T10:18:09.648Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/naapme:testIamPermissions 200
+[debug] [2025-03-23T10:18:09.649Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/naapme:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2025-03-23T10:18:09.649Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:09.649Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:09.650Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/naapme/serviceAccounts/naapme@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2025-03-23T10:18:09.650Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/naapme/serviceAccounts/naapme@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2025-03-23T10:18:11.125Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/naapme/serviceAccounts/naapme@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2025-03-23T10:18:11.125Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/naapme/serviceAccounts/naapme@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'naapme'...
+[info] 
+[info] i  deploying functions 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
+[info] Running command: npm --prefix "$RESOURCE_DIR" run build
+[info] +  functions: Finished running predeploy script. 
+[debug] [2025-03-23T10:18:14.803Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:14.804Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:14.804Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/naapme [none]
+[debug] [2025-03-23T10:18:16.246Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/naapme 200
+[debug] [2025-03-23T10:18:16.247Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/naapme {"projectNumber":"223523548568","projectId":"naapme","lifecycleState":"ACTIVE","name":"NaapMe","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2025-03-23T07:31:22.236184Z"}
+[info] i  functions: preparing codebase default for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[debug] [2025-03-23T10:18:16.253Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:16.253Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:16.254Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:16.254Z] Checked if tokens are valid: true, expires at: 1742726310240
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[debug] [2025-03-23T10:18:16.256Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:16.257Z] Checked if tokens are valid: true, expires at: 1742726310240
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2025-03-23T10:18:16.258Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:16.258Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:16.259Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudfunctions.googleapis.com [none]
+[debug] [2025-03-23T10:18:16.259Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/naapme
+[debug] [2025-03-23T10:18:16.266Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/runtimeconfig.googleapis.com [none]
+[debug] [2025-03-23T10:18:16.267Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/naapme
+[debug] [2025-03-23T10:18:16.275Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudbuild.googleapis.com [none]
+[debug] [2025-03-23T10:18:16.276Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudbuild.googleapis.com x-goog-quota-user=projects/naapme
+[debug] [2025-03-23T10:18:16.290Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/artifactregistry.googleapis.com [none]
+[debug] [2025-03-23T10:18:16.291Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/artifactregistry.googleapis.com x-goog-quota-user=projects/naapme
+[debug] [2025-03-23T10:18:17.886Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudbuild.googleapis.com 200
+[debug] [2025-03-23T10:18:17.886Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudbuild.googleapis.com [omitted]
+[warn] !  functions: missing required API cloudbuild.googleapis.com. Enabling now... 
+[debug] [2025-03-23T10:18:17.889Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:17.889Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:17.890Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudbuild.googleapis.com:enable [none]
+[debug] [2025-03-23T10:18:17.890Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudbuild.googleapis.com:enable x-goog-quota-user=projects/naapme
+[debug] [2025-03-23T10:18:17.906Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/runtimeconfig.googleapis.com 200
+[debug] [2025-03-23T10:18:17.907Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2025-03-23T10:18:17.913Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/artifactregistry.googleapis.com 200
+[debug] [2025-03-23T10:18:17.914Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/artifactregistry.googleapis.com [omitted]
+[warn] !  artifactregistry: missing required API artifactregistry.googleapis.com. Enabling now... 
+[debug] [2025-03-23T10:18:17.920Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:17.921Z] Checked if tokens are valid: true, expires at: 1742726310240
+[debug] [2025-03-23T10:18:17.921Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/naapme/services/artifactregistry.googleapis.com:enable [none]
+[debug] [2025-03-23T10:18:17.921Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/naapme/services/artifactregistry.googleapis.com:enable x-goog-quota-user=projects/naapme
+[debug] [2025-03-23T10:18:17.934Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudfunctions.googleapis.com 200
+[debug] [2025-03-23T10:18:17.934Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudfunctions.googleapis.com [omitted]
+[info] +  functions: required API cloudfunctions.googleapis.com is enabled 
+[debug] [2025-03-23T10:18:18.382Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/naapme/services/artifactregistry.googleapis.com:enable 400
+[debug] [2025-03-23T10:18:18.383Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/naapme/services/artifactregistry.googleapis.com:enable [omitted]
+[debug] [2025-03-23T10:18:19.293Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudbuild.googleapis.com:enable 400
+[debug] [2025-03-23T10:18:19.293Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/naapme/services/cloudbuild.googleapis.com:enable [omitted]
+[debug] [2025-03-23T10:18:23.404Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\Saran Zafar\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:269:49)
+    at listOnTimeout (node:internal/timers:594:17)
+    at process.processTimers (node:internal/timers:529:7)
+[error] 
+[error] Error: An unexpected error has occurred.
