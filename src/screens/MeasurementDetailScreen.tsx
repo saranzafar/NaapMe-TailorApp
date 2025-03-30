@@ -6,9 +6,8 @@ import { Measurement } from '../types/database';
 
 const MeasurementDetailScreen = ({ route, navigation }) => {
     const theme = useTheme();
-    const { measurement }: { measurement: Measurement } = route.params;
+    const { measurement } = route.params as { measurement: Measurement };
 
-    // Handle Delete
     const handleDelete = async () => {
         Alert.alert(
             'Delete Measurement',
@@ -19,7 +18,7 @@ const MeasurementDetailScreen = ({ route, navigation }) => {
                     text: 'Delete',
                     style: 'destructive',
                     onPress: async () => {
-                        await deleteMeasurement(measurement.id);
+                        await deleteMeasurement(measurement.id!, measurement.userId);
                         navigation.goBack();
                     },
                 },
@@ -29,14 +28,10 @@ const MeasurementDetailScreen = ({ route, navigation }) => {
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            {/* App Header */}
             <Appbar.Header>
-                <Appbar.BackAction onPress={() => navigation.goBack()} />
-                <Appbar.Content title="Measurement Details" />
-                <Appbar.Action
-                    icon="pencil"
-                    onPress={() => navigation.navigate('AddMeasurement', { measurement })}
-                />
+                <Appbar.BackAction onPress={() => navigation.goBack()} color={theme.colors.primary} />
+                <Appbar.Content title="Measurement Details" titleStyle={styles.appbarTitle} />
+                <Appbar.Action icon="pencil" onPress={() => navigation.navigate('AddMeasurement', { measurement })} />
                 <Appbar.Action icon="delete" onPress={handleDelete} />
             </Appbar.Header>
 
@@ -61,7 +56,6 @@ const MeasurementDetailScreen = ({ route, navigation }) => {
                 </Card.Content>
             </Card>
 
-            {/* Edit & Delete Buttons */}
             <View style={styles.actions}>
                 <Button
                     mode="contained"
@@ -81,6 +75,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 10,
+    },
+    appbarTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
     },
     card: {
         marginVertical: 8,

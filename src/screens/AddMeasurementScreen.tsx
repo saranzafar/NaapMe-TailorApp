@@ -1,62 +1,45 @@
-// src/screens/AddMeasurementScreen.tsx
 import React, { useState } from 'react';
-import {
-    View,
-    ScrollView,
-    StyleSheet,
-} from 'react-native';
-import {
-    Appbar,
-    TextInput,
-    Button,
-    useTheme,
-    IconButton,
-} from 'react-native-paper';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import { Appbar, TextInput, Button, useTheme, IconButton } from 'react-native-paper';
 import { Measurement, MeasurementField } from '../types/database';
 import { addMeasurement } from '../databases/database';
+import auth from '../firebase/config';
 
 const DEFAULT_REQUIRED_FIELDS: MeasurementField[] = [
     { key: 'قمیض', value: '', isRequired: true },
     { key: 'تیرہ', value: '', isRequired: true },
     { key: 'بازو', value: '', isRequired: true },
     { key: 'چوڑائی', value: '', isRequired: true },
+    { key: 'شلوار', value: '', isRequired: true },
+    { key: 'پانچہ', value: '', isRequired: true },
 ];
 
 const AddMeasurementScreen = ({ navigation, route }) => {
     const theme = useTheme();
     const editMeasurement = route.params?.measurement;
 
-    // State for form fields
     const [customerName, setCustomerName] = useState(editMeasurement?.customerName || '');
     const [phoneNumber, setPhoneNumber] = useState(editMeasurement?.phoneNumber || '');
     const [fields, setFields] = useState<MeasurementField[]>(
         editMeasurement?.fields || [...DEFAULT_REQUIRED_FIELDS]
     );
 
-    // Add a new custom field
     const addCustomField = () => {
-        setFields([
-            ...fields,
-            { key: '', value: '', isRequired: false },
-        ]);
+        setFields([...fields, { key: '', value: '', isRequired: false }]);
     };
 
-    // Update a specific field
     const updateField = (index: number, updates: Partial<MeasurementField>) => {
         const newFields = [...fields];
         newFields[index] = { ...newFields[index], ...updates };
         setFields(newFields);
     };
 
-    // Remove a field
     const removeField = (index: number) => {
         const newFields = fields.filter((_, idx) => idx !== index);
         setFields(newFields);
     };
 
-    // Validate form
     const validateForm = () => {
-        // Check required fields
         const missingRequiredFields = fields
             .filter(field => field.isRequired)
             .some(field => !field.value.trim());
@@ -65,35 +48,37 @@ const AddMeasurementScreen = ({ navigation, route }) => {
             alert('Customer name is required');
             return false;
         }
-
         if (!phoneNumber.trim()) {
             alert('Phone number is required');
             return false;
         }
-
         if (missingRequiredFields) {
             alert('Please fill all required fields');
             return false;
         }
-
         return true;
     };
 
-    // Save measurement
     const handleSave = async () => {
-        if (!validateForm()) {
+        if (!validateForm()) { return; }
+
+        // Get current user's UID
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+            alert('User not authenticated');
             return;
         }
 
         const measurement: Measurement = {
             id: editMeasurement?.id ?? null,
+            userId: currentUser.uid,
             customerName,
             phoneNumber,
             fields: fields.filter(field => field.key.trim() && field.value.trim()),
         };
 
         try {
-            const savedId = await addMeasurement(measurement);
+            await addMeasurement(measurement);
             navigation.goBack();
         } catch (error) {
             console.error('Error saving measurement:', error);
@@ -101,17 +86,13 @@ const AddMeasurementScreen = ({ navigation, route }) => {
         }
     };
 
-
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-            {/* App Header */}
             <Appbar.Header>
                 <Appbar.BackAction onPress={() => navigation.goBack()} />
                 <Appbar.Content title={editMeasurement ? 'Edit Measurement' : 'Add Measurement'} />
             </Appbar.Header>
-
             <ScrollView>
-                {/* Customer Info Inputs */}
                 <TextInput
                     label="Customer Name"
                     value={customerName}
@@ -127,8 +108,6 @@ const AddMeasurementScreen = ({ navigation, route }) => {
                     keyboardType="phone-pad"
                     style={styles.input}
                 />
-
-                {/* Dynamic Measurement Fields */}
                 {fields.map((field, index) => (
                     <View key={index} style={styles.fieldContainer}>
                         <TextInput
@@ -146,29 +125,14 @@ const AddMeasurementScreen = ({ navigation, route }) => {
                             style={styles.halfInput}
                         />
                         {!field.isRequired && (
-                            <IconButton
-                                icon="delete"
-                                onPress={() => removeField(index)}
-                            />
+                            <IconButton icon="delete" onPress={() => removeField(index)} />
                         )}
                     </View>
                 ))}
-
-                {/* Add Custom Field Button */}
-                <Button
-                    mode="outlined"
-                    onPress={addCustomField}
-                    style={styles.addFieldButton}
-                >
+                <Button mode="outlined" onPress={addCustomField} style={styles.addFieldButton}>
                     Add Custom Field
                 </Button>
-
-                {/* Save Button */}
-                <Button
-                    mode="contained"
-                    onPress={handleSave}
-                    style={styles.saveButton}
-                >
+                <Button mode="contained" onPress={handleSave} style={styles.saveButton}>
                     Save Measurement
                 </Button>
             </ScrollView>
