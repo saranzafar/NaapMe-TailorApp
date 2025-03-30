@@ -1,8 +1,11 @@
+// src/databases/database.ts
 import SQLite, { SQLiteDatabase } from 'react-native-sqlite-storage';
 import { Measurement } from '../types/database';
 
+// Configure SQLite for better error handling and Promise support
 SQLite.enablePromise(true);
 
+// Database configuration
 const DATABASE_NAME = 'NaapMe.db';
 
 // Singleton database instance
@@ -16,10 +19,10 @@ export const openDatabase = async (): Promise<SQLiteDatabase> => {
         }
 
         const db = await SQLite.openDatabase({ name: DATABASE_NAME, location: 'default' });
-        console.log('Database opened successfully.');
 
         // Ensure the measurements table exists
         await createMeasurementsTable(db);
+
         databaseInstance = db;
         return db;
     } catch (error) {
@@ -28,33 +31,37 @@ export const openDatabase = async (): Promise<SQLiteDatabase> => {
     }
 };
 
-// Create measurements table (drop old table if needed to update schema)
+// Create measurements table
 const createMeasurementsTable = async (db: SQLiteDatabase): Promise<void> => {
-    // const dropQuery = 'DROP TABLE IF EXISTS measurements'; // Force recreate for schema update
+    // const dropQuery = 'DROP TABLE IF EXISTS measurements';
+
     const createQuery = `
-    CREATE TABLE IF NOT EXISTS measurements (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id TEXT NOT NULL,
-        customer_name TEXT NOT NULL,
-        phone_number TEXT NOT NULL,
-        measurement_data TEXT NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`;
+        CREATE TABLE IF NOT EXISTS measurements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_name TEXT NOT NULL,
+            phone_number TEXT NOT NULL,
+            measurement_data TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `;
 
     return new Promise((resolve, reject) => {
         db.transaction(tx => {
-            // tx.executeSql(dropQuery, [], () => console.log('Old table dropped successfully.'));
+            // tx.executeSql(
+            //     dropQuery,
+            //     [],
+            //     () => console.log('Old table dropped successfully.')
+            // );
+
             tx.executeSql(
                 createQuery,
                 [],
                 () => {
-                    console.log('Measurements table created.');
                     resolve();
                 },
                 (_, error) => {
                     console.error('Error creating table:', error);
                     reject(error);
-                    return true;
                 }
             );
         });
@@ -63,9 +70,9 @@ const createMeasurementsTable = async (db: SQLiteDatabase): Promise<void> => {
 
 // Add or update measurement
 export const addMeasurement = async (measurement: Measurement): Promise<number> => {
+
     try {
         const db = await openDatabase();
-        console.log('Measurement in DB: ', measurement);
 
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
@@ -73,16 +80,15 @@ export const addMeasurement = async (measurement: Measurement): Promise<number> 
                     // Update existing measurement
                     tx.executeSql(
                         `UPDATE measurements 
-            SET customer_name = ?, 
-                phone_number = ?, 
-                measurement_data = ? 
-            WHERE id = ? AND user_id = ?`,
+                        SET customer_name = ?, 
+                            phone_number = ?, 
+                            measurement_data = ? 
+                        WHERE id = ?`,
                         [
                             measurement.customerName,
                             measurement.phoneNumber,
                             JSON.stringify(measurement.fields),
                             measurement.id,
-                            measurement.userId,
                         ],
                         (_, resultSet) => {
                             console.log('Measurement updated successfully:', resultSet);
@@ -91,30 +97,29 @@ export const addMeasurement = async (measurement: Measurement): Promise<number> 
                         (_, error) => {
                             console.error('Error updating measurement:', error);
                             reject(error);
-                            return true;
+                            return true; // Stop transaction on error
                         }
                     );
                 } else {
-                    console.log('Inside insert...');
-                    // Insert new measurement (include user_id)
+
+                    // Insert new measurement
                     tx.executeSql(
                         `INSERT INTO measurements 
-             (user_id, customer_name, phone_number, measurement_data) 
-             VALUES (?, ?, ?, ?)`,
+                        (customer_name, phone_number, measurement_data) 
+                        VALUES (?, ?, ?)`,
                         [
-                            measurement.userId,
                             measurement.customerName,
                             measurement.phoneNumber,
                             JSON.stringify(measurement.fields),
                         ],
                         (_, resultSet) => {
                             console.log('Measurement inserted successfully:', resultSet);
-                            resolve(resultSet.insertId);
+                            resolve(resultSet.insertId); // Ensure insertId is returned
                         },
                         (_, error) => {
                             console.error('Error inserting measurement:', error);
                             reject(error);
-                            return true;
+                            return true; // Stop transaction on error
                         }
                     );
                 }
@@ -130,24 +135,23 @@ export const addMeasurement = async (measurement: Measurement): Promise<number> 
     }
 };
 
-// Fetch all measurements for the given user
-export const getMeasurements = async (userId: string): Promise<Measurement[]> => {
+// Fetch all measurements
+export const getMeasurements = async (): Promise<Measurement[]> => {
     try {
         const db = await openDatabase();
 
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    'SELECT * FROM measurements WHERE user_id = ? ORDER BY created_at DESC',
-                    [userId],
+                    'SELECT * FROM measurements ORDER BY created_at DESC',
+                    [],
                     (_, resultSet) => {
                         const measurements: Measurement[] = resultSet.rows.raw().map(row => ({
                             id: row.id,
-                            userId: row.user_id,
                             customerName: row.customer_name,
                             phoneNumber: row.phone_number,
                             fields: row.measurement_data ? JSON.parse(row.measurement_data) : [],
-                            createdAt: row.created_at || new Date().toISOString(),
+                            createdAt: row.created_at || new Date().toISOString(), // Ensure valid timestamp
                         }));
                         resolve(measurements);
                     },
@@ -164,18 +168,18 @@ export const getMeasurements = async (userId: string): Promise<Measurement[]> =>
     }
 };
 
-// Delete a measurement (only if it belongs to the user)
-export const deleteMeasurement = async (id: number, userId: string): Promise<void> => {
+
+// Delete a measurement
+export const deleteMeasurement = async (id: number): Promise<void> => {
     try {
         const db = await openDatabase();
 
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    'DELETE FROM measurements WHERE id = ? AND user_id = ?',
-                    [id, userId],
+                    'DELETE FROM measurements WHERE id = ?',
+                    [id],
                     () => {
-                        console.log('Measurement deleted successfully');
                         resolve();
                     },
                     (_, error) => {

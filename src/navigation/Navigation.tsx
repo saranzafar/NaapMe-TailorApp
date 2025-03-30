@@ -11,8 +11,8 @@ import auth from '../firebase/config';
 import LandingScreen from '../auth/LandingScreen';
 import ForgotPasswordScreen from '../auth/ForgotPasswordScreen';
 import CheckEmailScreen from '../auth/CheckEmailScreen';
+import AddMeasurementScreen from '../screens/MeasurementScreen';
 import MeasurementDetailScreen from '../screens/MeasurementDetailScreen';
-import AddMeasurementScreen from '../screens/AddMeasurementScreen';
 
 const Stack = createStackNavigator();
 

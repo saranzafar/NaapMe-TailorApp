@@ -2,9 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Appbar, Text, Searchbar, Card, FAB, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
-import { Measurement } from '../types/database';
+import auth from '@react-native-firebase/auth';
 import { getMeasurements } from '../databases/database';
-import auth from '../firebase/config';
+import { Measurement } from '../types/database';
 
 // Separate ListEmptyComponent outside the render function
 const ListEmptyComponent = () => (
@@ -18,12 +18,11 @@ const HomeScreen = ({ navigation }) => {
     const [measurements, setMeasurements] = useState<Measurement[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredMeasurements, setFilteredMeasurements] = useState<Measurement[]>([]);
-    const userId = auth.currentUser?.uid || '';
 
     // Fetch measurements
     const fetchMeasurements = async () => {
         try {
-            const fetchedMeasurements = await getMeasurements(userId);
+            const fetchedMeasurements = await getMeasurements();
             setMeasurements(fetchedMeasurements);
             setFilteredMeasurements(fetchedMeasurements);
         } catch (error) {
@@ -31,25 +30,31 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
+    // Refresh measurements when screen is focused
     useFocusEffect(
         useCallback(() => {
             fetchMeasurements();
         }, [])
     );
 
+    // Search/Filter measurements
     const handleSearch = (query: string) => {
         setSearchQuery(query);
+
         if (!query) {
             setFilteredMeasurements(measurements);
             return;
         }
+
         const filtered = measurements.filter(measurement =>
             measurement.customerName.toLowerCase().includes(query.toLowerCase()) ||
             measurement.phoneNumber.includes(query)
         );
+
         setFilteredMeasurements(filtered);
     };
 
+    // Logout handler
     const handleLogout = async () => {
         try {
             await auth().signOut();
@@ -59,17 +64,20 @@ const HomeScreen = ({ navigation }) => {
         }
     };
 
+    // Navigation to measurement details
     const navigateToMeasurementDetail = (measurement: Measurement) => {
         navigation.navigate('MeasurementDetail', { measurement });
     };
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+        <View style={[styles.container]}>
+            {/* App Header */}
             <Appbar.Header>
                 <Appbar.Content title="NaapMe" />
                 <Appbar.Action icon="logout" onPress={handleLogout} />
             </Appbar.Header>
 
+            {/* Search Bar */}
             <Searchbar
                 placeholder="Search by name or phone"
                 onChangeText={handleSearch}
@@ -77,6 +85,7 @@ const HomeScreen = ({ navigation }) => {
                 style={[styles.searchBar, { backgroundColor: theme.colors.primaryContainer }]}
             />
 
+            {/* Measurements List */}
             <FlatList
                 data={filteredMeasurements}
                 keyExtractor={(item) => item.id?.toString() || ''}
@@ -93,6 +102,7 @@ const HomeScreen = ({ navigation }) => {
                 )}
             />
 
+            {/* Floating Action Button */}
             <FAB
                 icon="plus"
                 style={styles.fab}
@@ -103,11 +113,29 @@ const HomeScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 10 },
-    searchBar: { marginVertical: 10 },
-    card: { marginVertical: 5, elevation: 2 },
-    fab: { position: 'absolute', margin: 16, right: 0, bottom: 0 },
-    emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 50 },
+    container: {
+        flex: 1,
+        padding: 10,
+    },
+    searchBar: {
+        marginVertical: 10,
+    },
+    card: {
+        marginVertical: 5,
+        elevation: 2,
+    },
+    fab: {
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: 0,
+    },
+    emptyContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 50,
+    },
 });
 
 export default HomeScreen;

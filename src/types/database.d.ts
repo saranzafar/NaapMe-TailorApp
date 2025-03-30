@@ -1,3 +1,4 @@
+// src/types/database.ts
 export interface MeasurementField {
     key: string;
     value: string;
@@ -6,7 +7,6 @@ export interface MeasurementField {
 
 export interface Measurement {
     id?: number;
-    userId: string;
     customerName: string;
     phoneNumber: string;
     fields: MeasurementField[];
