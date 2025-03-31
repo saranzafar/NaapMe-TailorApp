@@ -19,13 +19,22 @@ const MeasurementDetailScreen = ({ route, navigation }) => {
                     text: 'Delete',
                     style: 'destructive',
                     onPress: async () => {
-                        await deleteMeasurement(measurement.id);
-                        navigation.goBack();
+                        try {
+                            if (measurement.id !== undefined) {
+                                await deleteMeasurement(measurement.id);
+                                navigation.goBack();
+                            } else {
+                                console.error('Measurement ID is undefined');
+                            }
+                        } catch (error) {
+                            console.error('Error deleting measurement:', error);
+                        }
                     },
                 },
             ]
         );
     };
+
 
     return (
         <View style={[styles.container, { backgroundColor: theme.colors.background }]}>

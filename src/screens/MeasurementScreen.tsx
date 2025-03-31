@@ -13,7 +13,7 @@ import {
     IconButton,
 } from 'react-native-paper';
 import { Measurement, MeasurementField } from '../types/database';
-import { addMeasurement } from '../databases/database';
+import { addMeasurement, updateMeasurement } from '../databases/database';
 
 const DEFAULT_REQUIRED_FIELDS: MeasurementField[] = [
     { key: 'قمیض', value: '', isRequired: true },
@@ -93,13 +93,20 @@ const AddMeasurementScreen = ({ navigation, route }) => {
         };
 
         try {
-            const savedId = await addMeasurement(measurement);
+            if (editMeasurement) {
+                // Call update function if editing
+                await updateMeasurement(measurement);
+            } else {
+                // Otherwise, add new measurement
+                await addMeasurement(measurement);
+            }
             navigation.goBack();
         } catch (error) {
             console.error('Error saving measurement:', error);
             alert('Failed to save measurement');
         }
     };
+
 
 
     return (

@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Appbar, Text, Searchbar, Card, FAB, useTheme } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
+import auth from '../firebase/config';
 import { getMeasurements } from '../databases/database';
 import { Measurement } from '../types/database';
 
@@ -22,7 +22,9 @@ const HomeScreen = ({ navigation }) => {
     // Fetch measurements
     const fetchMeasurements = async () => {
         try {
-            const fetchedMeasurements = await getMeasurements();
+            const fetchedMeasurements = await getMeasurements() || [];
+            console.log('Fetched measurements: ', fetchedMeasurements);
+
             setMeasurements(fetchedMeasurements);
             setFilteredMeasurements(fetchedMeasurements);
         } catch (error) {
@@ -57,7 +59,7 @@ const HomeScreen = ({ navigation }) => {
     // Logout handler
     const handleLogout = async () => {
         try {
-            await auth().signOut();
+            await auth.signOut();
             navigation.replace('Login');
         } catch (error) {
             console.error('Logout error:', error);

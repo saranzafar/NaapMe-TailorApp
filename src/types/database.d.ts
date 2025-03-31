@@ -6,6 +6,7 @@ export interface MeasurementField {
 }
 
 export interface Measurement {
+    uid?: string;
     id?: number;
     customerName: string;
     phoneNumber: string;
